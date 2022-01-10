@@ -1,5 +1,6 @@
 ﻿@page "/counter"
 @inject BusinessLayer.BetaInfoListFactory _betaListFactory;
+@inject ApplicationContext _appContext;
 
 <PageTitle>Counter</PageTitle>
 
@@ -7,10 +8,13 @@
 
 <p role="status">Current count: @currentCount</p>
 
+<p role="status">Guid from Application Context: @_guid</p>
+
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
     private int currentCount = 0;
+    private string _guid = string.Empty;
 
     private void IncrementCount()
     {
@@ -19,8 +23,14 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (_appContext != null
+            && !_appContext.LocalContext.Contains("Guid"))
+            _appContext.LocalContext.Add("Guid", Guid.NewGuid().ToString());
+
         //test call to business layer
         var betaList = await Task.FromResult(_betaListFactory.GetAll());
 
+        //display guid
+        _guid = _appContext?.LocalContext["Guid"]?.ToString();
     }
 }
