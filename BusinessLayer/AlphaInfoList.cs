@@ -11,7 +11,7 @@ namespace BusinessLayer
             ApplicationContext = applicationContext;
         }
 
-        public AlphaInfoList GetByAll()
+        public AlphaInfoList GetAll()
         {
             return Portal.Fetch();
         }
@@ -37,12 +37,19 @@ namespace BusinessLayer
         {
             using (var cxnManager = cxnManagerFactory.GetManager())
             {
-                // would normally be loading values from DAL
+                RaiseListChangedEvents = false;
+                IsReadOnly = false;
 
+                //**NOTE here the GUID of the cxnManager - should be same as previous if this is a chained call
+
+                // would normally be loading values from DAL
                 for (int i = 0; i < 5; i++)
                 {
                     Add(AlphaInfo.Load(alphaFactory, Guid.NewGuid()));
                 }
+
+                IsReadOnly = true;
+                RaiseListChangedEvents = true;
             }
         }
     }

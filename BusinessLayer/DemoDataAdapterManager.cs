@@ -39,7 +39,7 @@ namespace BusinessLayer
         private object _dbAdapter;
         public const string CONST_MYKEY_FOR_APPLICATIONCONTEXT = "__db:Main";
         private ApplicationContext ApplicationContext;
-        private Guid _guid = Guid.NewGuid();  //testing - allows tracking of new or existing jtdataadaptermanagers
+        public readonly Guid _guid = Guid.NewGuid();  //testing - allows tracking of new or existing jtdataadaptermanagers
 
         internal DemoDataAdapterManager(ApplicationContext applicationContext)
         {
