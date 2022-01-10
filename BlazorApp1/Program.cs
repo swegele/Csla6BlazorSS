@@ -13,7 +13,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpContextAccessor();
 
-//COMMENT this for DEMO #3 and uncomment below one
+
+//COMMENT this for DEMO #3 and then uncomment below one
 builder.Services.AddCsla(cslaOptions =>
     cslaOptions
         .AddServerSideBlazor());
@@ -24,6 +25,7 @@ builder.Services.AddCsla(cslaOptions =>
 //            .AddServerSideDataPortal()
 //            .UseLocalProxy(proxyOptions =>
 //                proxyOptions.CreateScopePerCall = false));
+
 
 //four business object factories and dataadaptermanager
 builder.Services.AddScoped<BusinessLayer.AlphaInfoFactory>();
@@ -37,6 +39,9 @@ builder.Services.AddScoped<DataPortal<BusinessLayer.AlphaInfo>>();
 builder.Services.AddScoped<DataPortal<BusinessLayer.AlphaInfoList>>();
 builder.Services.AddScoped<DataPortal<BusinessLayer.BetaInfo>>();
 builder.Services.AddScoped<DataPortal<BusinessLayer.BetaInfoList>>();
+
+//DEMO 4 - UNCOMMENT
+//builder.Services.AddScoped<Csla.Core.IContextManager, BlazorApplicationContextManager>();
 
 builder.Services.AddSingleton<WeatherForecastService>();
 

@@ -20,4 +20,13 @@ DEMO #3
 - Set LocalDataPortal to CreateScopePerCall = false by commenting current AddCsla section and uncommenting longer one that sets this option
 - Debug app again - notice how GUID no longer changes in chained [Fetch] methods
 - So now the server side scoped issue is gone
- 
+
+DEMO #4
+- Go to Counter page and note the GUID displayed
+- Navigate back and forth from index page and counter page...note the GUID changes
+- Copy link and open another browser tab and paste in the Counter page URL.  Again notice the GUID is changing each time for both tabs as you go back 
+	and forth between the index and counter page.
+- Now in Program.cs, uncomment the DEMO #4 service registry of the IContextManager and repeat steps above 
+- Notice that the GUID stays the same for each circuit separate from other circuits
+- ??I'm thinking you should have a BlazorApplicationContextManager that is used and registered as scoped for UseBlazorServerSide??
+
