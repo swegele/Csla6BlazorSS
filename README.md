@@ -2,6 +2,8 @@
 Demo to show a few strange behaviors
 Mostly you can just startup 
 
+** THESE DEMOS ARE TO BE DONE IN ORDER ** (each demo assumes the previous steps were done)
+
 DEMO #1
 - Set BlazorApp1 as startup project and debug.  Immediately you will notice the null reference error in the hosted DemoRefreshService,
 	because the underlying HttpContext is null since no request is associated with the call to this service.
