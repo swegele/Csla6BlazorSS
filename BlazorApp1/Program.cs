@@ -15,17 +15,16 @@ builder.Services.AddHttpContextAccessor();
 
 
 //COMMENT this for DEMO #3 and then uncomment below one
-builder.Services.AddCsla(cslaOptions =>
-    cslaOptions
-        .AddServerSideBlazor());
 //builder.Services.AddCsla(cslaOptions =>
 //    cslaOptions
-//        .AddServerSideBlazor()
-//        .DataPortal()
-//            .AddServerSideDataPortal()
-//            .UseLocalProxy(proxyOptions =>
-//                proxyOptions.CreateScopePerCall = false));
-
+//        .AddServerSideBlazor());
+builder.Services.AddCsla(cslaOptions =>
+    cslaOptions
+        .AddServerSideBlazor()
+        .DataPortal()
+            .AddServerSideDataPortal()
+            .UseLocalProxy(proxyOptions =>
+                proxyOptions.CreateScopePerCall = false));
 
 //four business object factories and dataadaptermanager
 builder.Services.AddScoped<BusinessLayer.AlphaInfoFactory>();

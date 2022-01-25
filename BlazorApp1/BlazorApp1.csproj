@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Csla.AspNetCore" Version="6.0.0-R22010601" />
     <PackageReference Include="Csla.Blazor" Version="6.0.0-R22010601" />
   </ItemGroup>
 
