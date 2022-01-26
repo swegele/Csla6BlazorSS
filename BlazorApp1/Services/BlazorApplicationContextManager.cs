@@ -68,8 +68,8 @@ public class BlazorApplicationContextManager : IContextManager, IDisposable
     {
         if (AuthenticationStateProvider is IHostEnvironmentAuthenticationStateProvider hostEnvironmentAuthProvider)
         {
-            var task = new Task<AuthenticationState>(() => new AuthenticationState(principal));
-            hostEnvironmentAuthProvider.SetAuthenticationState(task);
+            var authState = new AuthenticationState(principal);
+            hostEnvironmentAuthProvider.SetAuthenticationState(Task.FromResult(authState));
         }
     }
 
