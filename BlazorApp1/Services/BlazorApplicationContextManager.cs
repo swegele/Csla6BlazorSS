@@ -108,15 +108,20 @@ public class BlazorApplicationContextManager : IContextManager, IDisposable
     /// </summary>
     /// <param name="principal">Principal object.</param>
     public virtual void SetUser(IPrincipal principal)
-    {        
-        CurrentPrincipal = principal;
-        if (CurrentPrincipal is ClaimsPrincipal)
+    {   
+        //doing this check for now because currently LocalProxy is calling this over and over needlessly
+        if (!CurrentPrincipal.Equals(principal))
         {
-            SafeSetCurrentUser((ClaimsPrincipal)CurrentPrincipal);
-        }
-        else
-        {
-            //??
+            CurrentPrincipal = principal;
+
+            if (CurrentPrincipal is ClaimsPrincipal)
+            {
+                SafeSetCurrentUser((ClaimsPrincipal)CurrentPrincipal);
+            }
+            else
+            {
+                //??
+            }
         }
     }
 
