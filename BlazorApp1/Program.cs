@@ -14,7 +14,7 @@ builder.Services.AddCsla(options =>
     options.AddServerSideBlazor();
 
     //DEMO 1 - UNCOMMENT custom contextmanager when appropriate
-    //options.RegisterContextManager<BlazorApplicationContextManager>();
+    options.RegisterContextManager<BlazorApplicationContextManager>();
 });
 
 

@@ -43,18 +43,33 @@ public class BlazorApplicationContextManager : IContextManager, IDisposable
 
     private void InitializeUser()
     {
+        Task<AuthenticationState> getUserTask;
+        try
+        {
+            getUserTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
+        }
+        catch (InvalidOperationException ioex)
+        {
+            //?? It might be good enough to just test for that ioex but might we inadvertently catch other unrelated ones with same ioex type??
+            //?? Is it safe to go further and test for the method names being present in the exception without tripping over culture specific error messages 
+            string message = ioex.Message;
+            if (message.Contains(nameof(AuthenticationStateProvider.GetAuthenticationStateAsync))
+                && message.Contains(nameof(IHostEnvironmentAuthenticationStateProvider.SetAuthenticationState)))
+            {
+                SafeSetCurrentUser(UnauthenticatedPrincipal);
+            }
+            return;
+        }
+
+        AuthenticationStateProvider_AuthenticationStateChanged(getUserTask);
+    }
+
+    private void SafeSetCurrentUser(ClaimsPrincipal principal)
+    {
         if (AuthenticationStateProvider is IHostEnvironmentAuthenticationStateProvider hostEnvironmentAuthProvider)
         {
-            //i've no idea what i'm doing except to call set before get like error says
-            var task = new Task<AuthenticationState>(() => new AuthenticationState(UnauthenticatedPrincipal));
-
-            //the following set triggers the authentication state changed so why do it again below?
+            var task = new Task<AuthenticationState>(() => new AuthenticationState(principal));
             hostEnvironmentAuthProvider.SetAuthenticationState(task);
-        }
-        else
-        {
-            //??
-            AuthenticationStateProvider_AuthenticationStateChanged(AuthenticationStateProvider.GetAuthenticationStateAsync());
         }
     }
 
@@ -94,7 +109,15 @@ public class BlazorApplicationContextManager : IContextManager, IDisposable
     /// <param name="principal">Principal object.</param>
     public virtual void SetUser(IPrincipal principal)
     {        
-        throw new NotSupportedException(nameof(SetUser));
+        CurrentPrincipal = principal;
+        if (CurrentPrincipal is ClaimsPrincipal)
+        {
+            SafeSetCurrentUser((ClaimsPrincipal)CurrentPrincipal);
+        }
+        else
+        {
+            //??
+        }
     }
 
     /// <summary>

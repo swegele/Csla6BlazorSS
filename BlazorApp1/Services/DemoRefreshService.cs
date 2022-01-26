@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
@@ -35,14 +36,27 @@ public class DemoRefreshService : IHostedService
         return Task.CompletedTask;
     }
 
+    bool _doingWork = false;
     private void DoWork(object? state)
     {
+        //do a brief check to not start multiple at same time (shouldn't happen in normal course of business because minimum time...but during dev debugging it stucks)
+        if (_doingWork)
+            return;
+        else
+            _doingWork = true;
+
         try
         {
             //our api calls are in scoped services while this ihostedservice is singleton...so we have to create a scope here so we can fetch scoped services
             using (var scope = _serviceProvider.CreateScope())
             {
                 var sp = scope.ServiceProvider;
+                var authStateProvider = sp.GetRequiredService<AuthenticationStateProvider>();
+
+                //set user to blank claims principal
+                var task = new Task<AuthenticationState>(() => new AuthenticationState(new System.Security.Claims.ClaimsPrincipal()));
+                (authStateProvider as IHostEnvironmentAuthenticationStateProvider).SetAuthenticationState(task);
+
                 var betaFactory = sp.GetRequiredService<BetaInfoListFactory>();
 
                 //do call to BL
@@ -52,6 +66,10 @@ public class DemoRefreshService : IHostedService
         catch (Exception ex)
         {
             Debug.WriteLine("Oh Snap error in hosted service DoWork method - " + ex.GetBaseException().Message);
+        }
+        finally
+        {
+            _doingWork = false;
         }
     }
 
