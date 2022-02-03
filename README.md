@@ -3,7 +3,12 @@ Demo to show possible issues for csla blazor server side
 
 
 DEMO #1
-- Put a breakpoint in catch block of DemoRefreshService and start the app with no changes needed
-- Notice the hosted service (which starts before a page loads) causes error in the Csla.Blazor.ApplicationContextManager.
-- Now in Program.cs, uncomment the DEMO #1 custom application context manager 
-- re-run and notice now the error moves down to the SetUser method.
+- Pull latest from repo
+- Run app
+- Goto Counter page and notice unhandled error (hit F12 and see error)
+
+- Now comment out the following line at the top of Counter.razor page "@inject BusinessLayer.BetaInfoListFactory _betaListFactory"
+- Rerun app
+- Everything works
+
+??  what's going on

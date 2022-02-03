@@ -1,6 +1,8 @@
 ﻿@page "/counter"
-@inject BusinessLayer.BetaInfoListFactory _betaListFactory;
-@inject ApplicationContext _appContext;
+@inject ApplicationContext _appContext
+
+@*DEMO #1 - Comment out this next inject line and re-run*@
+@inject BusinessLayer.BetaInfoListFactory _betaListFactory
 
 <PageTitle>Counter</PageTitle>
 
@@ -26,9 +28,6 @@
         if (_appContext != null
             && !_appContext.LocalContext.Contains("Guid"))
             _appContext.LocalContext.Add("Guid", Guid.NewGuid().ToString());
-
-        //test call to business layer
-        var betaList = await Task.FromResult(_betaListFactory.GetAll());
 
         //display guid
         _guid = _appContext?.LocalContext["Guid"]?.ToString();

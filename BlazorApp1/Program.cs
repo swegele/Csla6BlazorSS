@@ -1,4 +1,3 @@
-using BlazorApp1.Services;
 using Csla;
 using Csla.Configuration;
 
@@ -12,9 +11,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddCsla(options =>
 {
     options.AddServerSideBlazor();
-
-    //DEMO 1 - UNCOMMENT custom contextmanager when appropriate
-    options.RegisterContextManager<BlazorApplicationContextManager>();
 });
 
 
@@ -30,8 +26,6 @@ builder.Services.AddScoped<DataPortal<BusinessLayer.AlphaInfo>>();
 builder.Services.AddScoped<DataPortal<BusinessLayer.AlphaInfoList>>();
 builder.Services.AddScoped<DataPortal<BusinessLayer.BetaInfo>>();
 builder.Services.AddScoped<DataPortal<BusinessLayer.BetaInfoList>>();
-
-builder.Services.AddHostedService<DemoRefreshService>(); //refresh service which makes a call without an httpcontext
 
 var app = builder.Build();
 
