@@ -1,6 +1,7 @@
 ﻿using BusinessLayer;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BlazorApp1.Services;
 
@@ -50,11 +51,21 @@ public class DemoRefreshService : IHostedService
             using (var scope = _serviceProvider.CreateScope())
             {
                 var sp = scope.ServiceProvider;
-                var authStateProvider = sp.GetRequiredService<AuthenticationStateProvider>();
+                
 
-                //set user to blank claims principal
-                var task = new Task<AuthenticationState>(() => new AuthenticationState(new System.Security.Claims.ClaimsPrincipal()));
-                (authStateProvider as IHostEnvironmentAuthenticationStateProvider).SetAuthenticationState(task);
+                ////FOR TESTING LOGIN DURING HOSTED SERVICE CALLS
+                //var authStateProvider = sp.GetRequiredService<AuthenticationStateProvider>();
+                ////set user to blank claims principal
+                //var claims = new List<Claim>
+                //{
+                //        new Claim(ClaimTypes.Name, "Sean")
+                //};
+                //var claimsIdentity = new ClaimsIdentity(claims, "Custom");
+                //var principal = new ClaimsPrincipal();
+                //principal.AddIdentities(new List<ClaimsIdentity>() { claimsIdentity });
+                //var task = Task.FromResult(new AuthenticationState(principal));
+                //(authStateProvider as IHostEnvironmentAuthenticationStateProvider).SetAuthenticationState(task);
+
 
                 var betaFactory = sp.GetRequiredService<BetaInfoListFactory>();
 
