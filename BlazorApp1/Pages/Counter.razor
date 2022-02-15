@@ -1,7 +1,5 @@
 ﻿@page "/counter"
-@inject ApplicationContext _appContext
 
-@*DEMO #1 - Comment out this next inject line and re-run*@
 @inject BusinessLayer.BetaInfoListFactory _betaListFactory
 
 <PageTitle>Counter</PageTitle>
@@ -25,11 +23,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (_appContext != null
-            && !_appContext.LocalContext.Contains("Guid"))
-            _appContext.LocalContext.Add("Guid", Guid.NewGuid().ToString());
+        if (_betaListFactory.ApplicationContext != null
+            && !_betaListFactory.ApplicationContext.LocalContext.Contains("Guid"))
+            _betaListFactory.ApplicationContext.LocalContext.Add("Guid", Guid.NewGuid().ToString());
+
+        //do lookup
+        var betaList = _betaListFactory.GetAll();
 
         //display guid
-        _guid = _appContext?.LocalContext["Guid"]?.ToString();
+        _guid = _betaListFactory.ApplicationContext?.LocalContext["Guid"]?.ToString();
     }
 }

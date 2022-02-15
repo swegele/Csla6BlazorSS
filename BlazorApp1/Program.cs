@@ -1,4 +1,5 @@
-using Csla;
+using BlazorApp1.Services;
+using BusinessLayer.ExtensionMethods;
 using Csla.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,21 +12,15 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddCsla(options =>
 {
     options.AddServerSideBlazor();
+    options.AddAspNetCore();
 });
 
+//auto register business object factories from each assembly that has any.  Call method sending in any class from within the assembly you want searched
+builder.Services.AutoRegisterBusinessObjectFactories(typeof(BusinessLayer.AlphaInfo));
 
-//four business object factories and dataadaptermanager
-builder.Services.AddScoped<BusinessLayer.AlphaInfoFactory>();
-builder.Services.AddScoped<BusinessLayer.AlphaInfoListFactory>();
-builder.Services.AddScoped<BusinessLayer.BetaInfoFactory>();
-builder.Services.AddScoped<BusinessLayer.BetaInfoListFactory>();
 builder.Services.AddScoped<BusinessLayer.DemoDataAdapterManagerFactory>();
 
-//matching dataportal services
-builder.Services.AddScoped<DataPortal<BusinessLayer.AlphaInfo>>();
-builder.Services.AddScoped<DataPortal<BusinessLayer.AlphaInfoList>>();
-builder.Services.AddScoped<DataPortal<BusinessLayer.BetaInfo>>();
-builder.Services.AddScoped<DataPortal<BusinessLayer.BetaInfoList>>();
+builder.Services.AddHostedService<DemoRefreshService>();
 
 var app = builder.Build();
 

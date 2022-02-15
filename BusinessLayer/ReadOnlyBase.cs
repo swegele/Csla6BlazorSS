@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BusinessLayer
 {
-    public abstract class DemoReadOnlyBaseFactory<T> 
+    public abstract class DemoReadOnlyBaseFactory<T> : IBusinessObjectFactory
         where T : DemoReadOnlyBase<T>, new()
     {
         protected IDataPortal<T> Portal { get; set; }

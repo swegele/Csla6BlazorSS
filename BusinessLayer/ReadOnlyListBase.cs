@@ -5,13 +5,13 @@ using System.Text;
 
 namespace BusinessLayer
 {
-    public abstract class DemoReadOnlyListBaseFactory<T, C>
+    public abstract class DemoReadOnlyListBaseFactory<T, C> : IBusinessObjectFactory
         where T : DemoReadOnlyListBase<T, C>, new()
         where C : DemoReadOnlyBase<C>, new()
     {
-        protected IDataPortal<T> Portal { get; set; }
+        public IDataPortal<T> Portal { get; set; }
 
-        protected ApplicationContext ApplicationContext { get; set; }
+        public ApplicationContext ApplicationContext { get; set; }
 
         /// <summary>
         /// Csla friendly way to create a new object.  Updates to Csla5 added code analyzer checks that no objects have any 
