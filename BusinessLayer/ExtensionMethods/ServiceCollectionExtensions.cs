@@ -15,7 +15,7 @@ namespace BusinessLayer.ExtensionMethods
         /// <returns></returns>
         public static IServiceCollection AutoRegisterBusinessObjectFactories(this IServiceCollection services)
         {
-            services.DiscoverTypesIn(typeof(AlphaInfo).Assembly)
+            services.DiscoverTypes()
                 .Where((type) =>
                 {
                     if (type.IsClass &&
