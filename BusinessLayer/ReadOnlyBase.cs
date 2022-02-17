@@ -8,8 +8,15 @@ namespace BusinessLayer
     public abstract class DemoReadOnlyBaseFactory<T> : IBusinessObjectFactory
         where T : DemoReadOnlyBase<T>, new()
     {
-        protected IDataPortal<T> Portal { get; set; }
-        protected ApplicationContext ApplicationContext { get; set; }
+        public readonly IDataPortal<T> Portal;
+
+        public readonly ApplicationContext ApplicationContext;
+
+        protected DemoReadOnlyBaseFactory(IDataPortalFactory portalFactory, ApplicationContext applicationContext)
+        {
+            Portal = portalFactory.GetPortal<T>();
+            ApplicationContext = applicationContext;
+        }
 
         /// <summary>
         /// Csla friendly way to create a new object that should replace any direct calls to CTOR in derived objects.  

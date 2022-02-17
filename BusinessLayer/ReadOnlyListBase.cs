@@ -9,9 +9,15 @@ namespace BusinessLayer
         where T : DemoReadOnlyListBase<T, C>, new()
         where C : DemoReadOnlyBase<C>, new()
     {
-        public IDataPortal<T> Portal { get; set; }
+        public readonly IDataPortal<T> Portal;
 
-        public ApplicationContext ApplicationContext { get; set; }
+        public readonly ApplicationContext ApplicationContext;
+
+        protected DemoReadOnlyListBaseFactory(IDataPortalFactory portalFactory, ApplicationContext applicationContext)
+        {
+            Portal = portalFactory.GetPortal<T>();
+            ApplicationContext = applicationContext;
+        }
 
         /// <summary>
         /// Csla friendly way to create a new object.  Updates to Csla5 added code analyzer checks that no objects have any 

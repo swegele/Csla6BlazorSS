@@ -5,16 +5,9 @@ namespace BusinessLayer
 {
     public class BetaInfoFactory : DemoReadOnlyBaseFactory<BetaInfo>
     {
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public BetaInfoFactory(IDataPortalFactory portal, ApplicationContext applicationContext)
+            : base(portal, applicationContext)
         {
-            Portal = portal.GetPortal<BetaInfo>();
-            ApplicationContext = applicationContext;
-        }
-
-        public BetaInfoFactory()
-        {
-
         }
 
         public BetaInfo GetById(Guid id)

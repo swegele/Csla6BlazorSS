@@ -5,16 +5,9 @@ namespace BusinessLayer
 {
     public class AlphaInfoFactory : DemoReadOnlyBaseFactory<AlphaInfo>
     {
-        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
         public AlphaInfoFactory(IDataPortalFactory portal, ApplicationContext applicationContext)
+            : base(portal, applicationContext)
         {
-            Portal = portal.GetPortal<AlphaInfo>();
-            ApplicationContext = applicationContext;
-        }
-
-        public AlphaInfoFactory()
-        {
-
         }
 
         public AlphaInfo GetById(Guid id)

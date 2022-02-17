@@ -15,8 +15,8 @@ builder.Services.AddCsla(options =>
     options.AddAspNetCore();
 });
 
-//auto register business object factories from each assembly that has any.  Call method sending in any class from within the assembly you want searched
-builder.Services.AutoRegisterBusinessObjectFactories(typeof(BusinessLayer.AlphaInfo));
+//auto register business object factories -  this extension method should be renamed when it goes live to match the assembly name
+builder.Services.AutoRegisterBusinessObjectFactories();
 
 builder.Services.AddScoped<BusinessLayer.DemoDataAdapterManagerFactory>();
 
