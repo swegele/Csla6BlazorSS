@@ -8,13 +8,14 @@ namespace BusinessLayer
     public abstract class DemoReadOnlyBaseFactory<T> : IBusinessObjectFactory
         where T : DemoReadOnlyBase<T>, new()
     {
-        public readonly IDataPortal<T> Portal;
+        private readonly IDataPortalFactory PortalFactory;
+        public IDataPortal<T> Portal { get { return PortalFactory.GetPortal<T>(); } }
 
         public readonly ApplicationContext ApplicationContext;
 
         protected DemoReadOnlyBaseFactory(IDataPortalFactory portalFactory, ApplicationContext applicationContext)
         {
-            Portal = portalFactory.GetPortal<T>();
+            PortalFactory = portalFactory;
             ApplicationContext = applicationContext;
         }
 

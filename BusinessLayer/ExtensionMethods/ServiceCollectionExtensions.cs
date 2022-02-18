@@ -18,8 +18,8 @@ namespace BusinessLayer.ExtensionMethods
             services.DiscoverTypes()
                 .Where((type) =>
                 {
+                    //TypeDiscoveryOptionsBuilder already checks for !IsAbstract so we don't need that here
                     if (type.IsClass &&
-                        !type.IsAbstract &&
                         typeof(IBusinessObjectFactory).IsAssignableFrom(type))
                     {
                         return true;

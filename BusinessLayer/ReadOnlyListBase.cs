@@ -9,13 +9,14 @@ namespace BusinessLayer
         where T : DemoReadOnlyListBase<T, C>, new()
         where C : DemoReadOnlyBase<C>, new()
     {
-        public readonly IDataPortal<T> Portal;
+        private readonly IDataPortalFactory PortalFactory;
+        public IDataPortal<T> Portal { get { return PortalFactory.GetPortal<T>(); } }
 
         public readonly ApplicationContext ApplicationContext;
 
         protected DemoReadOnlyListBaseFactory(IDataPortalFactory portalFactory, ApplicationContext applicationContext)
         {
-            Portal = portalFactory.GetPortal<T>();
+            PortalFactory = portalFactory;
             ApplicationContext = applicationContext;
         }
 
