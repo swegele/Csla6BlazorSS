@@ -24,13 +24,13 @@
     protected override async Task OnInitializedAsync()
     {
         if (_betaListFactory.ApplicationContext != null
-            && !_betaListFactory.ApplicationContext.LocalContext.Contains("Guid"))
-            _betaListFactory.ApplicationContext.LocalContext.Add("Guid", Guid.NewGuid().ToString());
+            && !_betaListFactory.ApplicationContext.ClientContext.Contains("Guid"))
+            _betaListFactory.ApplicationContext.ClientContext.Add("Guid", Guid.NewGuid().ToString());
 
         //do lookup
         var betaList = _betaListFactory.GetAll();
 
         //display guid
-        _guid = _betaListFactory.ApplicationContext?.LocalContext["Guid"]?.ToString();
+        _guid = _betaListFactory.ApplicationContext?.ClientContext["Guid"]?.ToString();
     }
 }

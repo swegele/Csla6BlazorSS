@@ -18,13 +18,13 @@ public class DemoRefreshService : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         // timer repeates call to DoWork on scheduled basis
-        int time = 2; //2 minutes for demo purposes
+        int refreshMinutes = 20;
 
         _timer = new Timer(
             DoWork,
             null,
             TimeSpan.Zero,
-            TimeSpan.FromMinutes(time)
+            TimeSpan.FromMinutes(refreshMinutes)
         );
 
         return Task.CompletedTask;
@@ -51,7 +51,7 @@ public class DemoRefreshService : IHostedService
             using (var scope = _serviceProvider.CreateScope())
             {
                 var sp = scope.ServiceProvider;
-                
+
 
                 ////FOR TESTING LOGIN DURING HOSTED SERVICE CALLS
                 //var authStateProvider = sp.GetRequiredService<AuthenticationStateProvider>();
@@ -65,7 +65,6 @@ public class DemoRefreshService : IHostedService
                 //principal.AddIdentities(new List<ClaimsIdentity>() { claimsIdentity });
                 //var task = Task.FromResult(new AuthenticationState(principal));
                 //(authStateProvider as IHostEnvironmentAuthenticationStateProvider).SetAuthenticationState(task);
-
 
                 var betaFactory = sp.GetRequiredService<BetaInfoListFactory>();
 

@@ -7,16 +7,16 @@ namespace BusinessLayer
 {
     public class DemoDataAdapterManagerFactory
     {
-        ApplicationContext ApplicationContext { get; set; }
+        ApplicationContext _ApplicationContext { get; set; }
 
         public DemoDataAdapterManagerFactory(ApplicationContext applicationContext)
         {
-            ApplicationContext = applicationContext;
+            _ApplicationContext = applicationContext;
         }
 
         public DemoDataAdapterManager GetManager()
         {
-            return DemoDataAdapterManager.GetExistingOrCreateNew(ApplicationContext);
+            return DemoDataAdapterManager.GetExistingOrCreateNew(_ApplicationContext);
         }
     }
 
