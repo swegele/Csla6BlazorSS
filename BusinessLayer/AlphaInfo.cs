@@ -3,19 +3,6 @@ using System;
 
 namespace BusinessLayer
 {
-    public class AlphaInfoFactory : DemoReadOnlyBaseFactory<AlphaInfo>
-    {
-        public AlphaInfoFactory(IDataPortalFactory portal, ApplicationContext applicationContext)
-            : base(portal, applicationContext)
-        {
-        }
-
-        public AlphaInfo GetById(Guid id)
-        {
-            return Portal.Fetch(id);
-        }
-    }
-
     [Serializable]
     public class AlphaInfo : DemoReadOnlyBase<AlphaInfo>
     {
@@ -43,11 +30,9 @@ namespace BusinessLayer
         }
 
         [Fetch]
-        private void Fetch(
-            Guid id,
-            [Inject] DemoDataAdapterManagerFactory cxnManagerFactory)
+        private void Fetch(Guid id)
         {
-            using (var cxnManager = cxnManagerFactory.GetManager())
+            using (var cxnManager = GetDataManager())
             {
                 // would normally be loading values from DAL
 
@@ -57,9 +42,9 @@ namespace BusinessLayer
         }
 
 
-        public static AlphaInfo Load(AlphaInfoFactory alphaFactory, Guid id)
+        public static AlphaInfo Load(ApplicationContext appContext, Guid id)
         {
-            var alpha = alphaFactory.CslaSafeConstructor();
+            var alpha = CslaSafeConstructor(appContext);
             alpha.LoadProperty(IdPropertyInfo, id);
             alpha.LoadProperty(NamePropertyInfo, alpha.Id.ToString());
 

@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Csla;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -66,10 +67,10 @@ public class DemoRefreshService : IHostedService
                 //var task = Task.FromResult(new AuthenticationState(principal));
                 //(authStateProvider as IHostEnvironmentAuthenticationStateProvider).SetAuthenticationState(task);
 
-                var betaFactory = sp.GetRequiredService<BetaInfoListFactory>();
+                var appContext = sp.GetRequiredService<ApplicationContext>();
 
                 //do call to BL
-                LoadFreshList(betaFactory).Wait();
+                LoadFreshList(appContext).Wait();
             }
         }
         catch (Exception ex)
@@ -82,10 +83,10 @@ public class DemoRefreshService : IHostedService
         }
     }
 
-    private async Task LoadFreshList(BetaInfoListFactory factory)
+    private async Task LoadFreshList(ApplicationContext appContext)
     {
         //do some business stuff
-        var translations = await Task.FromResult(factory.GetAll());
+        var translations = await Task.FromResult(BetaInfoList.GetAll(appContext));
     }
 
 }

@@ -1,5 +1,6 @@
 using BlazorApp1.Services;
 using BusinessLayer.ExtensionMethods;
+using Csla;
 using Csla.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,6 @@ builder.Services.AddCsla(options =>
     options.AddServerSideBlazor();
     options.AddAspNetCore();
 });
-
-//auto register business object factories -  this extension method should be renamed when it goes live to match the assembly name
-builder.Services.AutoRegisterBusinessObjectFactories();
 
 builder.Services.AddScoped<BusinessLayer.DemoDataAdapterManagerFactory>();
 

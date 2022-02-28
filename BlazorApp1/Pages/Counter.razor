@@ -1,6 +1,7 @@
 ﻿@page "/counter"
+@using BusinessLayer
 
-@inject BusinessLayer.BetaInfoListFactory _betaListFactory
+@inject ApplicationContext _appContext
 
 <PageTitle>Counter</PageTitle>
 
@@ -23,14 +24,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (_betaListFactory.ApplicationContext != null
-            && !_betaListFactory.ApplicationContext.ClientContext.Contains("Guid"))
-            _betaListFactory.ApplicationContext.ClientContext.Add("Guid", Guid.NewGuid().ToString());
+        if (_appContext != null
+            && !_appContext.ClientContext.Contains("Guid"))
+            _appContext.ClientContext.Add("Guid", Guid.NewGuid().ToString());
 
         //do lookup
-        var betaList = _betaListFactory.GetAll();
+        var betaList = BetaInfoList.GetAll(_appContext);
 
         //display guid
-        _guid = _betaListFactory.ApplicationContext?.ClientContext["Guid"]?.ToString();
+        _guid = _appContext.ClientContext["Guid"]?.ToString();
     }
 }

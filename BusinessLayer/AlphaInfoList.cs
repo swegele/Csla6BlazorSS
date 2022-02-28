@@ -1,26 +1,9 @@
 ﻿using Csla;
 using System;
+using BusinessLayer.ExtensionMethods;
 
 namespace BusinessLayer
 {
-    public class AlphaInfoListFactory : DemoReadOnlyListBaseFactory<AlphaInfoList, AlphaInfo>
-    {
-        public AlphaInfoListFactory(IDataPortalFactory portal, ApplicationContext applicationContext)
-            : base(portal, applicationContext)
-        {
-        }
-
-        public AlphaInfoList GetAll()
-        {
-            return Portal.Fetch();
-        }
-
-        internal AlphaInfoList GetEmpty()
-        {
-            return CslaSafeConstructor();
-        }
-    }
-
     [Serializable]
     public class AlphaInfoList : DemoReadOnlyListBase<AlphaInfoList, AlphaInfo>
     {
@@ -29,12 +12,15 @@ namespace BusinessLayer
 
         }
 
-        [Fetch]
-        private void Fetch(
-            [Inject] AlphaInfoFactory alphaFactory,
-            [Inject] DemoDataAdapterManagerFactory cxnManagerFactory)
+        public static AlphaInfoList GetAll(ApplicationContext appContext)
         {
-            using (var cxnManager = cxnManagerFactory.GetManager())
+            return GetDataPortal(appContext).Fetch();
+        }
+
+        [Fetch]
+        private void Fetch()
+        {
+            using (var cxnManager = GetDataManager())
             {
                 RaiseListChangedEvents = false;
                 IsReadOnly = false;
@@ -44,7 +30,7 @@ namespace BusinessLayer
                 // would normally be loading values from DAL
                 for (int i = 0; i < 5; i++)
                 {
-                    Add(AlphaInfo.Load(alphaFactory, Guid.NewGuid()));
+                    Add(AlphaInfo.Load(ApplicationContext, Guid.NewGuid()));
                 }
 
                 IsReadOnly = true;

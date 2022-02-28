@@ -1,41 +1,35 @@
 ﻿using Csla;
+using Csla.DataPortalClient;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using BusinessLayer.ExtensionMethods;
 
 namespace BusinessLayer
 {
-    public abstract class DemoReadOnlyListBaseFactory<T, C> : IBusinessObjectFactory
-        where T : DemoReadOnlyListBase<T, C>, new()
-        where C : DemoReadOnlyBase<C>, new()
-    {
-        private readonly IDataPortalFactory PortalFactory;
-        public IDataPortal<T> Portal { get { return PortalFactory.GetPortal<T>(); } }
-
-        public readonly ApplicationContext ApplicationContext;
-
-        protected DemoReadOnlyListBaseFactory(IDataPortalFactory portalFactory, ApplicationContext applicationContext)
-        {
-            PortalFactory = portalFactory;
-            ApplicationContext = applicationContext;
-        }
-
-        /// <summary>
-        /// Csla friendly way to create a new object.  Updates to Csla5 added code analyzer checks that no objects have any 
-        /// calls directly to constructors.  Forces objects to go through the DataPortal/ObjectFactory and properly manages object state
-        /// </summary>
-        /// <returns>an empty object of this type</returns>
-        public T CslaSafeConstructor()
-        {
-            return Portal.Fetch(new BaseOnlyEmptySemaphoreObject());
-        }
-    }
-
     [Serializable()]
     public abstract class DemoReadOnlyListBase<T, C> : ReadOnlyListBase<T, C>
         where T : DemoReadOnlyListBase<T, C>, new()
         where C : DemoReadOnlyBase<C>, new()
     {
+        protected static IDataPortal<T> GetDataPortal(ApplicationContext appContext)
+        {
+            var portalFactory = appContext.CreateInstanceViaDI<DataPortalFactory>();
+            var portal = portalFactory.GetPortal<T>();
+            return portal;
+        }
+
+        protected static T CslaSafeConstructor(ApplicationContext appContext)
+        {
+            var portal = GetDataPortal(appContext);
+            return portal.Fetch(new BaseOnlyEmptySemaphoreObject());
+        }
+
+        protected DemoDataAdapterManager GetDataManager()
+        {
+            return ApplicationContext.CreateInstanceViaDI<DemoDataAdapterManagerFactory>().GetManager();
+        }
+
         /// <summary>
         /// Corresponds to factory CslaSafeConstructor above
         /// </summary>

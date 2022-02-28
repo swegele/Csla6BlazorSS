@@ -1,20 +1,9 @@
 ﻿using Csla;
 using System;
+using BusinessLayer.ExtensionMethods;
 
 namespace BusinessLayer
 {
-    public class BetaInfoFactory : DemoReadOnlyBaseFactory<BetaInfo>
-    {
-        public BetaInfoFactory(IDataPortalFactory portal, ApplicationContext applicationContext)
-            : base(portal, applicationContext)
-        {
-        }
-
-        public BetaInfo GetById(Guid id)
-        {
-            return Portal.Fetch(id);
-        }
-    }
 
     [Serializable]
     public class BetaInfo : DemoReadOnlyBase<BetaInfo>
@@ -22,6 +11,11 @@ namespace BusinessLayer
         public BetaInfo()
         {
 
+        }
+
+        public static BetaInfo GetById(ApplicationContext appContext, Guid id)
+        {
+            return GetDataPortal(appContext).Fetch(id);
         }
 
         public static readonly PropertyInfo<Guid> IdPropertyInfo = RegisterProperty<Guid>(c => c.Id);
@@ -43,11 +37,9 @@ namespace BusinessLayer
         }
 
         [Fetch]
-        private void Fetch(
-            Guid id,
-            [Inject] DemoDataAdapterManagerFactory cxnManagerFactory)
+        private void Fetch(Guid id)
         {
-            using (var cxnManager = cxnManagerFactory.GetManager())
+            using (var cxnManager = GetDataManager())
             {
                 // would normally be loading values from DAL
 
@@ -57,9 +49,9 @@ namespace BusinessLayer
         }
 
 
-        public static BetaInfo Load(BetaInfoFactory BetaFactory, Guid id)
+        public static BetaInfo Load(ApplicationContext appContext, Guid id)
         {
-            var beta = BetaFactory.CslaSafeConstructor();
+            var beta = CslaSafeConstructor(appContext);
             beta.LoadProperty(IdPropertyInfo, id);
             beta.LoadProperty(NamePropertyInfo, beta.Id.ToString());
 

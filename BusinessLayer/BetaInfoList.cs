@@ -1,26 +1,9 @@
 ﻿using Csla;
 using System;
+using BusinessLayer.ExtensionMethods;
 
 namespace BusinessLayer
 {
-    public class BetaInfoListFactory : DemoReadOnlyListBaseFactory<BetaInfoList, BetaInfo>
-    {
-        public BetaInfoListFactory(IDataPortalFactory portal, ApplicationContext applicationContext)
-            :base(portal, applicationContext)
-        {
-        }
-
-        public BetaInfoList GetAll()
-        {
-            return Portal.Fetch();
-        }
-
-        internal BetaInfoList GetEmpty()
-        {
-            return CslaSafeConstructor();
-        }
-    }
-
     [Serializable]
     public class BetaInfoList : DemoReadOnlyListBase<BetaInfoList, BetaInfo>
     {
@@ -29,13 +12,15 @@ namespace BusinessLayer
 
         }
 
-        [Fetch]
-        private void Fetch(
-            [Inject] AlphaInfoListFactory alphaInfoListFactory,
-            [Inject] BetaInfoFactory betaFactory,
-            [Inject] DemoDataAdapterManagerFactory cxnManagerFactory)
+        public static BetaInfoList GetAll(ApplicationContext appContext)
         {
-            using (var cxnManager = cxnManagerFactory.GetManager())
+            return GetDataPortal(appContext).Fetch();
+        }
+
+        [Fetch]
+        private void Fetch()
+        {
+            using (var cxnManager = GetDataManager())
             {
                 RaiseListChangedEvents = false;
                 IsReadOnly = false;
@@ -43,12 +28,12 @@ namespace BusinessLayer
                 //**NOTE here the GUID of the cxnManager - should be same as previous if this is a chained call
 
                 //example of fetching another list for some business reason which should re-use the dataadaptermanager and applicationcontext
-                var alphaList = alphaInfoListFactory.GetAll();
+                var alphaList = AlphaInfoList.GetAll(ApplicationContext);
 
                 // would normally be loading values from DAL
                 for (int i = 0; i < 5; i++)
                 {
-                    Add(BetaInfo.Load(betaFactory, Guid.NewGuid()));
+                    Add(BetaInfo.Load(ApplicationContext, Guid.NewGuid()));
                 }
 
                 IsReadOnly = true;
